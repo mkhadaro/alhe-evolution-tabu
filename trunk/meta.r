@@ -12,9 +12,9 @@ meta_evolution <- function(init, eval, value, select, mutation, crossover, scala
 	T <- list()
 	for(i in 1:scalar_params$max_iter) {
 		EP  <- eval(P, value)		
-		O <- []		
+		O
 		for(i in 1:scalar_params$lambda) {		
-			if( UG()  scalar_params$prob_cross)	
+			if( UG() < scalar_params$prob_cross)	
 				O[i] <- crossover(select(EP,T, 2))
 			else
 				O[i] <- select(EP, T,1)
@@ -43,7 +43,7 @@ meta_eval <- function(P, value) {
 	for(i in 1:len) {
 		E[i]<-value(P[i])
 	}
-	return list(values=E, population=P)
+	return (list(values=E, population=P))
 }
 
 meta_select_tournament <- function (EP, T, num_individual) {
@@ -55,10 +55,10 @@ meta_select_tournament <- function (EP, T, num_individual) {
 		else 
 			result[i] <- EP$population[p2]
 	}
-	return result
+	return(result)
 }
 
-update_tabu <- function(T, P, scalar_params$tabu_pop_size){
+update_tabu <- function(T, P, tabu_pop_size){
 	#TODO
 }
 
