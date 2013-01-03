@@ -14,7 +14,6 @@ bag.init <- function (population_size) {
 }
 
 bag.mutation <- function (individual) {
-	#losujemy dwa indeksy i, j
 	indexes<-sample(1:length(individual),2,replace=T) 
 	temp<-individual[indexes[1]]
 	individual[indexes[1]]<-individual[indexes[2]]
@@ -30,9 +29,10 @@ bag.crossover <- function (individuals) {
 
 bag.replacement <- function (EP, EO) {
 	ni <- length(EP$P)
-	#ma zwarac tyle ni elementow ze zbioru P i O
-	#lambda>=ni
-	return(E0$P[1:length])
+	lambda <- length(EO)
+	if(ni==lambda)
+		return EO$individuals
+	return c(EO$individuals, EP$individuals[1:(ni-lambda)])	#tutaj zakładamy że EP jest posortowane malejąco
 }
 
 bag.value <- function (individual) {
