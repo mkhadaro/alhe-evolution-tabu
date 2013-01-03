@@ -22,9 +22,9 @@ meta_evolution <- function(init, eval, value, select, mutation, crossover, scala
 			if(UG() < scalar_params$prob_mut) 
 				O[i] <- mutation(O[i])
 		}
-		OE <- eval(O)
+		EO <- eval(O)
 		update_tabu(T, P, scalar_params$tabu_pop_size)
-		P <- replacement( PE,OE )
+		P <- replacement( EP,EO )
 
 	} 
 }
@@ -49,17 +49,19 @@ meta_eval <- function(P, value) {
 meta_select_tournament <- function (EP, T, num_individual) {
 	result <- c()
 	for (i in 1:num_individual) {
-		#wybierz 2 elementy p1 p2
-		if(EP$values[p1]>EP$values[p2]) 
-			result[i] <- EP$population[p1]
+		p<-sample(1:num_individual,2,replace=T)
+		if(EP$values[p[1]]>EP$values[p[2]]) 
+			result[i] <- EP$population[p[1]]
 		else 
-			result[i] <- EP$population[p2]
+			result[i] <- EP$population[p[2]]
 	}
 	return(result)
 }
 
-update_tabu <- function(T, P, tabu_pop_size){
-	#TODO
+update_tabu <- function(T, P, scalar_params$tabu_pop_size){
+	for(i in 1:tabu_pop_size) {
+		;
+	}
 }
 
 
