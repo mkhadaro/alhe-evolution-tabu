@@ -25,7 +25,7 @@ bag.mutation <- function (individual) {
 
 bag.crossover <- function (individuals) {
 	#krosujemy
-	return child
+	return (child)
 }
 
 bag.replacement <- function (EP, EO) {
@@ -49,5 +49,5 @@ bag.value <- function (individual) {
 		 		break
 		 }
 	}
-	return value
+	return(value)
 }
