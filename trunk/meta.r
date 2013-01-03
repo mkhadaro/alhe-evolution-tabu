@@ -1,6 +1,6 @@
 data <- list(
 			lambda = 10,
-			max_iter = 100, #Iteracje do zakonczenia alg
+			max_iter = 100, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
 			prob_mut = 0.01,
 			tabu_pop_size = 3 #Ilosc populacji pamietanych przez tabu
