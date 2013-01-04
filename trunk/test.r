@@ -50,14 +50,9 @@ test.bag_value <-function(){
 #-------------------------------------------------------------------
 
 test.meta_get_tabu_indexes <- function () {
-	equal_individuals <- function (i1, i2) {
-		return (i1==i2)
-	}
-	P <- c("marian", "lukasz", "kasia" )
-	V <- c(8, 7, 6)
-	EP<-list(individuals=P, values=V)
-	T <- list(c("marian", "wawrzyniec", "lukasz", "antande"))
-	print("Powinno zwrocic >>1, 2<<")
+	P <- bag.init(10)
+	EP<- meta.eval(P)
+	
 	return (meta.get_tabu_indexes(EP, T, equal_individuals))
 }
 
