@@ -74,8 +74,6 @@ meta.problem.value <-bag.value
 
 test.meta_eval <- function() {
 	I<-bag.init(10)
-	print(I)
-	print(I[1,])
 	#bag.value(I[1])	
  	return (meta.eval(I))
 }
