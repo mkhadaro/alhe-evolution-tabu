@@ -7,7 +7,7 @@ meta.params <- list(
 			max_iter = 100, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
 			prob_mut = 0.01,
-			tabu_pop_size = 3 #Ilosc populacji pamietanych przez tabu
+			tabu_pop_size = 3, #Ilosc populacji pamietanych przez tabu
 			tabu_penaulty = 0.3 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
 		)
 
@@ -97,12 +97,10 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	for(i in 1:ni )	# równe szanse wybrania do szranek
 		weights[i]<-1
 	
-	print(weights)
 
 	for(i in T_indexes)	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
 		weights[i]<-paramTabu 
 
-	print(weights)
 
 	result <- matrix(byrow = T, ncol=ncol(EP$individuals), nrow=num_selected)
 	
