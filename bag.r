@@ -28,48 +28,50 @@ bag.crossover <- function (parent1, parent2) {
 	crossLength <- sample(1:parentLength,1,replace=T)#dlugosc segemntu krzyzowania
 	ibeg <- sample(1:(parentLength-crossLength+1),1,replace=T)#index poczatkowy seg. krzyz.
 	iend <- (ibeg+crossLength-1) #index koncowy seg. krzyz.
+    
 	SegmentParent <- matrix(data=c(parent1[ibeg:iend], parent2[ibeg:iend]), byrow = T,nrow=2, ncol=crossLength)#segemnty krzyżowania dla obojga rodziców
 	
 	child <-c()
 	child[ibeg:iend] <-SegmentParent[1,]
+	#print(child)
+	#print(SegmentParent)
 	for(locus in 1:parentLength){
 		soughtAllele <-parent2[locus]
 		saPosParent1 <- which( SegmentParent[1,] == soughtAllele) #soughtAllele position in parent 1
 		saPosParent2 <- which( SegmentParent[2,] == soughtAllele) #soughtAllele position in parent 2
 
-		if (length(saPosParent1) ) {
-			newLocus <-saPosParent1[1]
-			newSoughtAllele <- SegmentParent[2,newLocus]
-			nsaPosParent1 <- which( SegmentParent[1,] == newSoughtAllele)
-			if(soughtAllele == newSoughtAllele)
-				next
-			while (length(nsaPosParent1)){
-				newLocus <- nsaPosParent1[1]
-				newSoughtAllele <- SegmentParent[2,newLocus]
-				nsaPosParent1 <- which( SegmentParent[1,] == newSoughtAllele)			
-			}	
-			newAllele <- newSoughtAllele
+		if (length(saPosParent1)) {
+			next
 		}
-		else if(length(saPosParent2)){
+		else if (length(saPosParent2) ){
 			newSoughtAllele <- soughtAllele
-			nsaPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
-			if(soughtAllele == newSoughtAllele)
-				next
-			while (length(nsaPosParent2)){
-				newLocus <- nsaPosParent2[1]
+			while (length(saPosParent2)){
+				
+				#print("while")
+				newLocus <- saPosParent2[1]
+				#print (newLocus)
 				newSoughtAllele <- SegmentParent[1,newLocus]
-				nsaPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
+				#print(newSoughtAllele)
+				
+				
+				saPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
+				if(!length(saPosParent2)){
+					break
+				}
+				
 			}
-			newAllele <- soughtAllele
-			locus <- which( parent2 == newSoughtAllele)
+			saPosParent2 <- which( parent2 == newSoughtAllele)
+			newLocus <- saPosParent2[1]
+			child[newLocus] <- soughtAllele
 		}
 		else{
-			newAllele <- soughtAllele
+			child[locus] <- soughtAllele
 			}
 		
-		if (is.na(child[locus])){
-			child[locus] <- newAllele
-		}#
+		#if (is.na(child[locus])){
+		#	child[locus] <- newAllele
+			#print(child)
+		#}#
 	}#for
 	return (child)
 }
