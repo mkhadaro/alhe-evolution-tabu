@@ -44,6 +44,39 @@ test.bag_value <-function(){
 	print(bag.value(c(3,1,2))==4)
 	print(bag.value(c(3,2,1))==4)
 }
+
+
+
 #-------------------------------------------------------------------
 # META TESTS
 #-------------------------------------------------------------------
+
+test.meta_get_tabu_indexes <- function () {
+	equal_individuals <- function (i1, i2) {
+		return (i1==i2)
+	}
+	P <- c("marian", "lukasz", "kasia" )
+	V <- c(8, 7, 6)
+	EP<-list(individuals=P, values=V)
+	T <- list(c("marian", "wawrzyniec", "lukasz", "antande"))
+	print("Powinno zwrócić >>1, 2<<")
+	return (meta.get_tabu_indexes(EP, T, equal_individuals))
+}
+
+test.meta_select_tabu_tournament <- function() {
+	P <- c("marian", "lukasz", "kasia" )
+	V <- c(8, 7, 6)
+	EP<-list(individuals=P, values=V)
+	T_indexes <- c(2) #Łukasz w tabu
+	num_selected <- 1
+	return (meta_select_tabu_tournament (EP, T_indexes, numselected))
+}
+
+test.meta_eval <- function(I) {
+	I<-("ma", "mmmmmm", "mamm")
+	value <- function (i) {
+		return (nchar(i))
+ 	} 
+ 	return (meta_eval(I, value))
+}
+
