@@ -52,7 +52,8 @@ test.bag_value <-function(){
 test.meta_get_tabu_indexes <- function () {
 	P <- bag.init(10)
 	EP<- meta.eval(P)
-	
+	T <- P[1:3, ]
+
 	return (meta.get_tabu_indexes(EP, T, equal_individuals))
 }
 
@@ -70,5 +71,29 @@ test.meta_eval <- function() {
 	meta.problem.value <-bag.value
 	#bag.value(I[1])	
  	return (meta.eval(I))
+}
+
+test.meta_update_tabu<-function() {
+	P<-bag.init(10)
+	T<-matrix(nrow=(meta.params$tabu_pop_size*meta.params$ni), ncol=length(P[1, ]))
+	tabu_it<-0
+	T<-meta.meta_update_tabu(T,P,tabu_it)
+	print(T)
+
+	tabu_it<-1
+	P<-bag.init(10)
+	T<-meta.meta_update_tabu(T,P,tabu_it)
+	print(T)
+
+
+	tabu_it<-2
+	P<-bag.init(10)
+	T<-meta.meta_update_tabu(T,P,tabu_it)
+	print(T)
+
+	tabu_it<-0
+	P<-bag.init(10)
+	T<-meta.meta_update_tabu(T,P,tabu_it)
+	print(T)
 }
 

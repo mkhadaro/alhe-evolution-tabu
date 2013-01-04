@@ -2,7 +2,7 @@
 #	1. eval (I, value) sortuje wg malejącej oceny osobniki
 
 meta.params <- list(
-			ni =12,	#ni>lambda
+			ni =10,	#ni>lambda
 			lambda = 10,
 			max_iter = 100, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
@@ -14,7 +14,8 @@ meta.params <- list(
 
 meta.meta_evolution <- function () {
 	P <- meta.problem.init(meta.params$ni) 
-	T <- replicate(meta.params$tabu_pop_size, list()) #tworzy listę tylu pustych list ile ma trzymac tabu populacji (każda populacja jest odseparowana) 
+	T <- matrix(nrow=meta.params$tabu_pop_size*meta.params$ni, ncol=length(P[1, ]))
+	tabu_it <- 0
 	for(i in 1:meta.params$max_iter) {
 		EP  <- meta.eval(P) 
 		T_indexes <- meta.get_tabu_indexes(EP, T)
@@ -29,7 +30,8 @@ meta.meta_evolution <- function () {
 				O[i] <- meta.problem.mutation(O[i])
 		}
 		EO <- meta.eval(O)
-		meta.update_tabu(T, P, meta.params$tabu_pop_size)
+		T<-meta.update_tabu(T, P, tabu_it)
+		tabu_it <- ((tabu_it +1)%%meta.params$tabu_pop_size)	# cykliczne tabu iterator po populacjach (MRU most recently used)
 		P <- meta.replacement( EP,EO )
 	} 
 	print(EP)
@@ -120,9 +122,10 @@ meta.meta_select_tabu_threshold <- function (EP, T, num_selected){
 	return (list())
 }
 
-meta.meta_update_tabu <- function(T, P, tabu_pop_size){
-	T[1]<-NULL #usuniecie pierwszego elementu
-	T[tabu_pop_size]<-P
+meta.meta_update_tabu <- function(T, P, tabu_it){
+	offset <- (tabu_it)*meta.params$ni+1
+	T[offset:(offset+meta.params$ni-1), ]<-P[1:10, ]
+	return (T)
 }
 
 meta.meta_replacement <- function (EP, EO) {
