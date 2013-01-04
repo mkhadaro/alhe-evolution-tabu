@@ -1,9 +1,9 @@
 
 # ustawienia wywolania, mozna przeladowac, mozna zostawic
 bag.problem <- list(
-			weights=c(1,2,3),
-			values=c(1,2,4),
-			max_weight=3
+			weights=c(1, 2, 3, 4, 5),
+			values=c(1, 1, 11, 16, 24),
+			max_weight=7
 		)
 #TESTED
 bag.init <- function (population_size) {
@@ -26,7 +26,10 @@ bag.mutation <- function (individual) {
 
 #TESTED
 bag.equal_individuals <-function(i1, i2) {
-	return (all(i1==i2))
+	result<-(all(i1==i2))
+	if(is.null(result) || is.na(result) )
+		return (FALSE)
+	return (result)
 }
 
 #TESTED
@@ -70,6 +73,7 @@ bag.crossover <- function (parent1, parent2) {
 			child[locus] <- soughtAllele
 			}
 	}#for
+	
 	return (child)
 }
 

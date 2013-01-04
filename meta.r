@@ -4,7 +4,7 @@
 meta.params <- list(
 			ni =10,	#ni>lambda
 			lambda = 10,
-			max_iter = 100, #Iteracje do zakonczenia algorytmu
+			max_iter = 50, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
 			prob_mut = 0.01,
 			tabu_pop_size = 3, #Ilosc populacji pamietanych przez tabu
@@ -19,40 +19,44 @@ meta.meta_evolution <- function () {
 	for(i in 1:meta.params$max_iter) {
 		EP  <- meta.eval(P) 
 		T_indexes <- meta.get_tabu_indexes(EP, T)
-		O <- c()		
+		O <- matrix(nrow=meta.params$lambda, ncol=length(P[1, ]))	
+		#print(O)	
 		for(i in 1:meta.params$lambda) {		
-			if( meta.UG() < meta.params$prob_cross)	
-				O[i] <- meta.problem.crossover(meta.select(EP,T_indexes, 2)) # @TODO priority=low ile osobników ze sobą krzyżujemy powinna być zparamatryzowana (tak mówił arabas na wykładzie)
+			if( meta.UG() < meta.params$prob_cross)	{
+				parent_matrix<-meta.select(EP,T_indexes, 2)
+				crossover_res<-meta.problem.crossover(parent_matrix[1,],parent_matrix[2,])
+				O[i, ] <-crossover_res  # @TODO priority=low ile osobników ze sobą krzyżujemy powinna być zparamatryzowana (tak mówił arabas na wykładzie)
+			}
 			else
-				O[i] <- meta.select(EP, T_indexes, 1)
+				O[i, ] <- meta.select(EP, T_indexes, 1)
 
 			if(meta.UG() < meta.params$prob_mut) 
-				O[i] <- meta.problem.mutation(O[i])
+				O[i, ] <- meta.problem.mutation(O[i, ])
 		}
 		EO <- meta.eval(O)
 		T<-meta.update_tabu(T, P, tabu_it)
-		tabu_it <- ((tabu_it +1)%%meta.params$tabu_pop_size)	# cykliczne tabu iterator po populacjach (MRU most recently used)
+		tabu_it <- ((tabu_it +1)%%meta.params$tabu_pop_size)	# cykliczne tabu iterator po populacjach (MRU most recently used) 
 		P <- meta.replacement( EP,EO )
+		print(EP)
 	} 
-	print(EP)
+	
 }
 
 # /return	zwraca te indeksy z EP które odpowiadają osobnikom które są na tabu;
 #			posortowane rosnąco
 meta.get_tabu_indexes <- function (EP, T) {
 	result <- c()
-	
-	T_linear <- unlist(T)
-	l_T_linear <- length(T_linear) #length of T_linear
-	
-	if(l_T_linear==0)
-		return
 
-	l_EP <- length(EP$individuals)
+	size_tabu<-nrow(T)
+	print(size_tabu)
 
-	for(i in 1:l_T_linear) {
-		for(j in 1:l_EP) {
-			if( meta.problem.equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
+	size_EP <- length(EP$values)
+	print(size_EP)
+
+	for(i in 1:size_tabu) {
+		for(j in 1:size_EP) {
+			#print(meta.problem.equal_individuals(T[i, ], (EP$individuals)[j, ] ))
+			if( meta.problem.equal_individuals(T[i, ], (EP$individuals)[j, ] ) ) {
 				result<-append(result, j)
 			}
 		}
@@ -128,23 +132,32 @@ meta.meta_update_tabu <- function(T, P, tabu_it){
 	return (T)
 }
 
+# @TODO przetestować
 meta.meta_replacement <- function (EP, EO) {
-	ni <- length(EP$individuals)
-	lambda <- length(EO)
-	if(ni==lambda)
+	if(meta.params$ni==meta.params$lambda)
 		return (EO$individuals)
-	return (c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
+	
+	result<-matrix(byrow = T, ncol=ncol(EO$individuals), nrow=meta.params$ni)
+	dif <- meta.params$ni-meta.params$lambda
+	
+	result[1:dif, ] <- (EP$individuals) [1:dif, ]
+	result[dif:meta.params$ni, ] <- (EO$individuals)[1:meta.params$lambda, ]
+
+	return (result)
 }
+
 
 
 
 main<-function(){
 	meta.problem.crossover <<- bag.crossover
-	meta.problem.crossover <<- bag.mutation
+	meta.problem.mutation <<- bag.mutation
 	meta.problem.init <<- bag.init
 	meta.problem.equal_individuals <<- bag.equal_individuals
 	meta.problem.value <<- bag.value
 	meta.select <<- meta.meta_select_tabu_tournament
+	meta.update_tabu<<-meta.meta_update_tabu
+	meta.replacement<<-meta.meta_replacement
 	meta.meta_evolution()
 }
 
