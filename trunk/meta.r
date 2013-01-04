@@ -131,11 +131,14 @@ meta.meta_replacement <- function (EP, EO) {
 	return (c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
 }
 
-meta.problem <- list()
+
 
 main<-function(){
 
-meta.problem <-bag.problem
-meta.dupa()
+meta.problem.crossover <-bag.crossover
+meta.problem.crossover <-bag.mutation
+meta.problem.init <-bag.initequal_individuals
+meta.problem.equal_individuals <-bag.equal_individuals
+meta.problem.value <-bag.value
 #meta.meta_evolution()
 }

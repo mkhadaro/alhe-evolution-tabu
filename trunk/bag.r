@@ -1,3 +1,4 @@
+
 # ustawienia wywolania, mozna przeladowac, mozna zostawic
 bag.data <- list(
 			weights=c(1,2,3),
