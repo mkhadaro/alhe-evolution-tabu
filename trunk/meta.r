@@ -46,7 +46,7 @@ get_tabu_indexes <- function (EP, T, equal_individuals) {
 
 	l_EP <- length(EP$individuals)
 	
-	for(i in 1:l_T_linear {
+	for(i in 1:l_T_linear) {
 		for(j in 1:l_EP) {
 			if( equal_individuals(T_linear[i], EP$I[j]) )
 				result[i_result]=j;
@@ -130,10 +130,10 @@ meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 
 # @TODO priority=medium zaimplementować drugą selekcję
 meta_select_tabu_threshold <- function (EP, T, num_selected){	
-	return list()
+	return (list())
 }
 
-meta_update_tabu <- function(T, P, scalar_params$tabu_pop_size){
+meta_update_tabu <- function(T, P, tabu_pop_size){
 	T[1]<-NULL #usuniecie pierwszego elementu
 	T[tabu_pop_size]<-P
 }
@@ -142,8 +142,8 @@ meta_replacement <- function (EP, EO) {
 	ni <- length(EP$P)
 	lambda <- length(EO)
 	if(ni==lambda)
-		return EO$individuals
-	return c(EO$individuals, EP$individuals[1:(ni-lambda)])	#tutaj zakładamy że EP jest posortowane malejąco
+		return (EO$individuals)
+	return (c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
 }
 
 
