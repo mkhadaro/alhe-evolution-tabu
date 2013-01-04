@@ -72,6 +72,7 @@ test.meta_select_tabu_tournament <- function() {
 
 test.meta_eval <- function() {
 	I<-bag.init(10)
+	meta.problem<-bag
  	return (meta.eval(I))
 }
 
