@@ -11,8 +11,7 @@ meta.params <- list(
 		)
 
 
-meta.meta_evolution <- function(   select) {
-
+meta.meta_evolution <- function (select) {
 	P <- meta.problem.init(meta.params$ni) 
 	T <- replicate(meta.params$tabu_pop_size, list()) #tworzy listę tylu pustych list ile ma trzymac tabu populacji (każda populacja jest odseparowana) 
 	for(i in 1:meta.params$max_iter) {
