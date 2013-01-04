@@ -8,6 +8,7 @@ meta.params <- list(
 			prob_cross = 0.8,	
 			prob_mut = 0.01,
 			tabu_pop_size = 3 #Ilosc populacji pamietanych przez tabu
+			tabu_penaulty = 0.3 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
 		)
 
 
@@ -88,22 +89,26 @@ meta.eval <- function(I) { #I==individuals
 # /param T_indexes	te
 # /return	zwraca num_selected osobników
 meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
-	paramTabu <- 0.5 	# tutaj wpisujemy wagę prawdopodobobieństwa wyboru osobnika z tabu
-						# gdzie waga dla osobników nie z tabu wynosi 1
+	paramTabu <- meta.params$tabu_penaulty 
 
 	ni <- length(EP$values)
 	weights<- c()	# tablica prawdopodobieństw wybrania osobnika z populacji
 	
 	for(i in 1:ni )	# równe szanse wybrania do szranek
-		weights[i]=1
+		weights[i]<-1
 	
-	for(i in 1:length(T_indexes))	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
-		weights[T_indexes[i]]=paramTabu 
+	print(weights)
+
+	for(i in T_indexes)	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
+		weights[i]<-paramTabu 
+
+	print(weights)
 
 	result <- matrix(byrow = T, ncol=ncol(EP$individuals), nrow=num_selected)
 	
 	for (i in 1:num_selected) {
-		p<-sample(1:ni,2,replace=T, weights)
+		p<-sample(1:ni,2,replace=T, prob=weights)
+		print(p)
 		if( (EP$values[p[1]]) > (EP$values[p[2]]) ) 
 			result[i, ] <- EP$individuals[p[1], ]
 		else 
