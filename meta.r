@@ -16,7 +16,7 @@ meta.meta_evolution <- function () {
 	T <- replicate(meta.params$tabu_pop_size, list()) #tworzy listę tylu pustych list ile ma trzymac tabu populacji (każda populacja jest odseparowana) 
 	for(i in 1:meta.params$max_iter) {
 		EP  <- meta.eval(P) 
-		T_indexes <- meta.get_tabu_indexes(EP, T, equal_individuals)
+		T_indexes <- meta.get_tabu_indexes(EP, T))
 		O <- c()		
 		for(i in 1:meta.params$lambda) {		
 			if( meta.UG() < meta.params$prob_cross)	
@@ -31,11 +31,12 @@ meta.meta_evolution <- function () {
 		meta.update_tabu(T, P, meta.params$tabu_pop_size)
 		P <- meta.replacement( EP,EO )
 	} 
+	print(EP)
 }
 
 # /return	zwraca te indeksy z EP które odpowiadają osobnikom które są na tabu;
 #			posortowane rosnąco
-meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
+meta.get_tabu_indexes <- function (EP, T) {
 	result <- c()
 	
 	T_linear <- unlist(T)
@@ -48,7 +49,7 @@ meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
 
 	for(i in 1:l_T_linear) {
 		for(j in 1:l_EP) {
-			if( equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
+			if( meta.equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
 				result<-append(result, j)
 			}
 		}
@@ -134,12 +135,12 @@ meta.meta_replacement <- function (EP, EO) {
 
 
 main<-function(){
-	meta.problem.crossover <-bag.crossover
-	meta.problem.crossover <-bag.mutation
-	meta.problem.init <-bag.initequal_individuals
-	meta.problem.equal_individuals <-bag.equal_individuals
-	meta.problem.value <-bag.value
-	meta.select <-meta.meta_select_tabu_tournament
-	#meta.meta_evolution()
+	meta.problem.crossover <<- bag.crossover
+	meta.problem.crossover <<- bag.mutation
+	meta.problem.init <<- bag.init
+	meta.problem.equal_individuals <<- bag.equal_individuals
+	meta.problem.value <<- bag.value
+	meta.select <<- meta.meta_select_tabu_tournament
+	meta.meta_evolution()
 }
 
