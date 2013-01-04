@@ -91,7 +91,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	paramTabu <- 0.5 	# tutaj wpisujemy wagę prawdopodobobieństwa wyboru osobnika z tabu
 						# gdzie waga dla osobników nie z tabu wynosi 1
 
-	ni <- length(EP$individuals)
+	ni <- length(EP$values)
 	weights<- c()	# tablica prawdopodobieństw wybrania osobnika z populacji
 	
 	for(i in 1:ni )	# równe szanse wybrania do szranek
@@ -100,14 +100,14 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	for(i in 1:length(T_indexes))	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
 		weights[T_indexes[i]]=paramTabu 
 
-	result <- c()
+	result <- matrix(byrow = T, ncol=ncol(EP$individuals))
 	
 	for (i in 1:num_selected) {
 		p<-sample(1:ni,2,replace=T, weights)
 		if( (EP$values[p[1]]) > (EP$values[p[2]]) ) 
-			result[i] <- EP$individuals[p[1]]
+			result[i, ] <- EP$individuals[p[1], ]
 		else 
-			result[i] <- EP$individuals[p[2]]
+			result[i, ] <- EP$individuals[p[2], ]
 	}
 	
 	return(result)
