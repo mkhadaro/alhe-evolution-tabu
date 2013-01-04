@@ -103,7 +103,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	
 	for (i in 1:num_selected) {
 		p<-sample(1:ni,2,replace=T, weights)
-		if(EP$values[p[1]]>EP$values[p[2]]) 
+		if( (EP$values[p[1]]) > (EP$values[p[2]]) ) 
 			result[i] <- EP$individuals[p[1]]
 		else 
 			result[i] <- EP$individuals[p[2]]
