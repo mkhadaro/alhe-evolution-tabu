@@ -37,7 +37,6 @@ meta.meta_evolution <- function(   select) {
 # /return	zwraca te indeksy z EP które odpowiadają osobnikom które są na tabu
 meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
 	result <- c()
-	i_result <- 1
 	
 	T_linear <- unlist(T)
 	l_T_linear <- length(T_linear) #length of T_linear
@@ -50,11 +49,18 @@ meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
 	for(i in 1:l_T_linear) {
 		for(j in 1:l_EP) {
 			if( equal_individuals(T_linear[i], EP$I[j]) )
-				result[i_result]=j;
-				i_result<-1+i_result;
+				append(result, j)
 		}
 	}	
+
+	return (unique(sort(result, descending=TRUE)))
 }
+# @TODO przetestuj to dziwko!
+# test:
+# P <- c("marian", "lukasz", "kasia" )
+# V <- c(8, 7, 6)
+# EP<-list(individuals=P, values=V)
+# T <- c()
 
 # UG - generator liczb losowych - odczyt kolejnej wartosci 
 # ze zbioru liczb losowych lub generacja
@@ -121,7 +127,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	
 	return(result)
 }
-# test:
+# @przetestowane:
 # P <- c("marian", "lukasz", "kasia" )
 # V <- c(8, 7, 6)
 # EP<-list(individuals=P, values=V)
