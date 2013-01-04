@@ -100,7 +100,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	for(i in 1:length(T_indexes))	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
 		weights[T_indexes[i]]=paramTabu 
 
-	result <- matrix(byrow = T, ncol=ncol(EP$individuals))
+	result <- matrix(byrow = T, ncol=ncol(EP$individuals), nrow=num_selected)
 	
 	for (i in 1:num_selected) {
 		p<-sample(1:ni,2,replace=T, weights)
