@@ -96,11 +96,9 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	
 	for(i in 1:ni )	# równe szanse wybrania do szranek
 		weights[i]<-1
-	
 
 	for(i in T_indexes)	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
 		weights[i]<-paramTabu 
-
 
 	result <- matrix(byrow = T, ncol=ncol(EP$individuals), nrow=num_selected)
 	
