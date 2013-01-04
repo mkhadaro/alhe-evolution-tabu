@@ -134,11 +134,10 @@ meta.meta_replacement <- function (EP, EO) {
 
 
 main<-function(){
-
-meta.problem.crossover <-bag.crossover
-meta.problem.crossover <-bag.mutation
-meta.problem.init <-bag.initequal_individuals
-meta.problem.equal_individuals <-bag.equal_individuals
-meta.problem.value <-bag.value
-#meta.meta_evolution()
+	meta.problem.crossover <-bag.crossover
+	meta.problem.crossover <-bag.mutation
+	meta.problem.init <-bag.initequal_individuals
+	meta.problem.equal_individuals <-bag.equal_individuals
+	meta.problem.value <-bag.value
+	#meta.meta_evolution()
 }
