@@ -22,6 +22,10 @@ bag.mutation <- function (individual) {
 	return(individual)
 }
 
+bag.equal_individuals (i1, i2) {
+	return (all(i1==i2))
+}
+
 bag.crossover <- function (parent1, parent2) {
 #krzyzowanie PMX oparte o http://algorytmy-genetyczne.eprace.edu.pl/664,Implementacja.html
     parentLength <- length(parent1)
@@ -59,14 +63,6 @@ bag.crossover <- function (parent1, parent2) {
 			}
 	}#for
 	return (child)
-}
-
-bag.replacement <- function (EP, EO) {
-	ni <- length(EP$P)
-	lambda <- length(EO)
-	if(ni==lambda)
-		return (EO$individuals)
-	return( c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
 }
 
 bag.value <- function (individual) {
