@@ -28,50 +28,35 @@ bag.crossover <- function (parent1, parent2) {
 	crossLength <- sample(1:parentLength,1,replace=T)#dlugosc segemntu krzyzowania
 	ibeg <- sample(1:(parentLength-crossLength+1),1,replace=T)#index poczatkowy seg. krzyz.
 	iend <- (ibeg+crossLength-1) #index koncowy seg. krzyz.
-    
 	SegmentParent <- matrix(data=c(parent1[ibeg:iend], parent2[ibeg:iend]), byrow = T,nrow=2, ncol=crossLength)#segemnty krzyżowania dla obojga rodziców
-	
 	child <-c()
 	child[ibeg:iend] <-SegmentParent[1,]
-	#print(child)
-	#print(SegmentParent)
+
 	for(locus in 1:parentLength){
 		soughtAllele <-parent2[locus]
 		saPosParent1 <- which( SegmentParent[1,] == soughtAllele) #soughtAllele position in parent 1
 		saPosParent2 <- which( SegmentParent[2,] == soughtAllele) #soughtAllele position in parent 2
 
-		if (length(saPosParent1)) {
+		if (length(saPosParent1)) {#Wystapilo juz w segmencie krzyzowania
 			next
 		}
-		else if (length(saPosParent2) ){
+		else if (length(saPosParent2) ){#Jest w pominietym segmencie krzyzowania, trzeba wybrac nowe miejsce.
 			newSoughtAllele <- soughtAllele
 			while (length(saPosParent2)){
-				
-				#print("while")
 				newLocus <- saPosParent2[1]
-				#print (newLocus)
 				newSoughtAllele <- SegmentParent[1,newLocus]
-				#print(newSoughtAllele)
-				
-				
 				saPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
 				if(!length(saPosParent2)){
 					break
-				}
-				
+				}				
 			}
 			saPosParent2 <- which( parent2 == newSoughtAllele)
 			newLocus <- saPosParent2[1]
 			child[newLocus] <- soughtAllele
 		}
-		else{
+		else{#Nie ma go w segmentach krzyzowania, dajemu tu gdzie stoi.
 			child[locus] <- soughtAllele
 			}
-		
-		#if (is.na(child[locus])){
-		#	child[locus] <- newAllele
-			#print(child)
-		#}#
 	}#for
 	return (child)
 }
