@@ -22,8 +22,75 @@ bag.mutation <- function (individual) {
 	return(individual)
 }
 
-bag.crossover <- function (individuals) {
-	#krosujemy
+bag.crossover <- function (parent1, parent2) {
+#krzyzowanie PMX oparte o http://algorytmy-genetyczne.eprace.edu.pl/664,Implementacja.html
+    parentLength <- length(parent1)
+	crossLength <- sample(1:parentLength,1,replace=T)#dlugosc segemntu krzyzowania
+	ibeg <- sample(1:(parentLength-crossLength+1),1,replace=T)#index poczatkowy seg. krzyz.
+	iend <- (ibeg+crossLength-1) #index koncowy seg. krzyz.
+    ibeg<-4
+	iend<-8
+	crossLength<-5
+	SegmentParent <- matrix(data=c(parent1[ibeg:iend], parent2[ibeg:iend]), byrow = T,nrow=2, ncol=crossLength)#segemnty krzyżowania dla obojga rodziców
+	
+	child <-c()
+	child[ibeg:iend] <-SegmentParent[1,]
+	print(child)
+	print(SegmentParent)
+	for(locus in 1:parentLength){
+		soughtAllele <-parent2[locus]
+		saPosParent1 <- which( SegmentParent[1,] == soughtAllele) #soughtAllele position in parent 1
+		saPosParent2 <- which( SegmentParent[2,] == soughtAllele) #soughtAllele position in parent 2
+
+		if (length(saPosParent1) ) {
+			print("xxx")
+			newLocus <-saPosParent1[1]
+			
+			newSoughtAllele <- SegmentParent[2,newLocus]
+			
+			nsaPosParent1 <- which( SegmentParent[1,] == newSoughtAllele)
+			print (newLocus)
+			print(newSoughtAllele)
+			print(nsaPosParent1)
+			if(soughtAllele == newSoughtAllele)
+				next
+			while (length(nsaPosParent1)){
+				newLocus <- nsaPosParent1[1]
+				print (newLocus)
+				newSoughtAllele <- SegmentParent[2,newLocus]
+				print(newSoughtAllele)
+				
+				nsaPosParent1 <- which( SegmentParent[1,] == newSoughtAllele)
+				
+			}
+			
+			newAllele <- newSoughtAllele
+		}
+		else if(length(saPosParent2)){
+			print("yyy")
+			print (soughtAllele)
+			newSoughtAllele <- soughtAllele
+			nsaPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
+			if(soughtAllele == newSoughtAllele)
+				next
+			while (length(nsaPosParent2)){
+				newLocus <- nsaPosParent2[1]
+				newSoughtAllele <- SegmentParent[1,newLocus]
+				nsaPosParent2 <- which( SegmentParent[2,] == newSoughtAllele)
+			}
+			newAllele <- soughtAllele
+			locus <- which( parent2 == newSoughtAllele)
+		}
+		else{
+			print("zzz")
+			newAllele <- soughtAllele
+			}
+		
+		if (is.na(child[locus])){
+			child[locus] <- newAllele
+			print(child)
+		}#
+	}#for
 	return (child)
 }
 
@@ -31,8 +98,8 @@ bag.replacement <- function (EP, EO) {
 	ni <- length(EP$P)
 	lambda <- length(EO)
 	if(ni==lambda)
-		return EO$individuals
-	return c(EO$individuals, EP$individuals[1:(ni-lambda)])	#tutaj zakładamy że EP jest posortowane malejąco
+		return (EO$individuals)
+	return( c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
 }
 
 bag.value <- function (individual) {
