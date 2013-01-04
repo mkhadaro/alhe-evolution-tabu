@@ -16,7 +16,7 @@ meta.meta_evolution <- function () {
 	T <- replicate(meta.params$tabu_pop_size, list()) #tworzy listę tylu pustych list ile ma trzymac tabu populacji (każda populacja jest odseparowana) 
 	for(i in 1:meta.params$max_iter) {
 		EP  <- meta.eval(P) 
-		T_indexes <- meta.get_tabu_indexes(EP, T))
+		T_indexes <- meta.get_tabu_indexes(EP, T)
 		O <- c()		
 		for(i in 1:meta.params$lambda) {		
 			if( meta.UG() < meta.params$prob_cross)	
@@ -49,7 +49,7 @@ meta.get_tabu_indexes <- function (EP, T) {
 
 	for(i in 1:l_T_linear) {
 		for(j in 1:l_EP) {
-			if( meta.equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
+			if( meta.problem.equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
 				result<-append(result, j)
 			}
 		}
