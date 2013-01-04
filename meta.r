@@ -11,7 +11,7 @@ meta.params <- list(
 		)
 
 
-meta.meta_evolution <- function (select) {
+meta.meta_evolution <- function () {
 	P <- meta.problem.init(meta.params$ni) 
 	T <- replicate(meta.params$tabu_pop_size, list()) #tworzy listę tylu pustych list ile ma trzymac tabu populacji (każda populacja jest odseparowana) 
 	for(i in 1:meta.params$max_iter) {
@@ -20,9 +20,9 @@ meta.meta_evolution <- function (select) {
 		O <- c()		
 		for(i in 1:meta.params$lambda) {		
 			if( meta.UG() < meta.params$prob_cross)	
-				O[i] <- meta.problem.crossover(select(EP,T, 2)) # @TODO priority=low ile osobników ze sobą krzyżujemy powinna być zparamatryzowana (tak mówił arabas na wykładzie)
+				O[i] <- meta.problem.crossover(meta.select(EP,T_indexes, 2)) # @TODO priority=low ile osobników ze sobą krzyżujemy powinna być zparamatryzowana (tak mówił arabas na wykładzie)
 			else
-				O[i] <- select(EP, T,1, meta.params$ni)
+				O[i] <- meta.select(EP, T_indexes, 1)
 
 			if(meta.UG() < meta.params$prob_mut) 
 				O[i] <- meta.problem.mutation(O[i])
@@ -139,5 +139,7 @@ main<-function(){
 	meta.problem.init <-bag.initequal_individuals
 	meta.problem.equal_individuals <-bag.equal_individuals
 	meta.problem.value <-bag.value
+	meta.select <-meta.meta_select_tabu_tournament
 	#meta.meta_evolution()
 }
+
