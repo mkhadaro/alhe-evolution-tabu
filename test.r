@@ -9,8 +9,6 @@ test.bag_init<-function(){
 }
 
 test.bag_mutation<-function(){
-	#print(bag.init(1))
-
 	print(bag.mutation(c(1,2,3,4,5,6,7,8,9)))
 	print(bag.mutation(c(1,2,3)))
 	print(bag.mutation(c(1)))
