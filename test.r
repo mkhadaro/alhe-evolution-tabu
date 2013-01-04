@@ -65,8 +65,8 @@ test.meta_select_tabu_tournament <- function() {
 	P <- bag.init(10)
 	EP<- meta.eval(P)
 	T_indexes <- c(1:9) 
-	num_selected <- 1
-	print(EP$values)
+	num_selected <- 2
+	print(EP)
 	return (meta.meta_select_tabu_tournament (EP, T_indexes, num_selected))
 }
 
