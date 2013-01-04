@@ -34,7 +34,8 @@ meta.meta_evolution <- function(   select) {
 	} 
 }
 
-# /return	zwraca te indeksy z EP które odpowiadają osobnikom które są na tabu
+# /return	zwraca te indeksy z EP które odpowiadają osobnikom które są na tabu;
+#			posortowane rosnąco
 meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
 	result <- c()
 	
@@ -45,22 +46,17 @@ meta.get_tabu_indexes <- function (EP, T, equal_individuals) {
 		return
 
 	l_EP <- length(EP$individuals)
-	
+
 	for(i in 1:l_T_linear) {
 		for(j in 1:l_EP) {
-			if( equal_individuals(T_linear[i], EP$I[j]) )
-				append(result, j)
+			if( equal_individuals(T_linear[i], (EP$individuals)[j] ) ) {
+				result<-append(result, j)
+			}
 		}
 	}	
-
-	return (unique(sort(result, descending=TRUE)))
+	return (unique(sort(result)))
 }
-# @TODO przetestuj to dziwko!
-# test:
-# P <- c("marian", "lukasz", "kasia" )
-# V <- c(8, 7, 6)
-# EP<-list(individuals=P, values=V)
-# T <- c()
+# @przetestowane	
 
 # UG - generator liczb losowych - odczyt kolejnej wartosci 
 # ze zbioru liczb losowych lub generacja
@@ -83,13 +79,6 @@ meta.eval <- function(I) { #I==individuals
 	return (list(values=E, individuals=I))
 }
 # @przetestowane
-# kod testujący:
-# I<-("ma", "mmmmmm", "mamm")
-# value <- function (i) {
-#	return (nchar(i))
-# } 
-# meta_eval(I, value)
-# zwraca odpowiednio posortowaną listę
 
 # @TODO priority=low wielkość szranek powinna zostać zparametryzowana (na wykładzie było jak wielkość szranek wpływa ogólnie na algorytm)
 # /description	tabu wpływa na prowdopodobieństwo wybrania osobnika do szranek
@@ -111,10 +100,6 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	for(i in 1:length(T_indexes))	# skorygowanie równych szans o zmniejszenie dla osobników z tabu
 		weights[T_indexes[i]]=paramTabu 
 
-#debug
-#	for(i in 1:ni)
-#		print(weights[i])		
-
 	result <- c()
 	
 	for (i in 1:num_selected) {
@@ -127,13 +112,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	
 	return(result)
 }
-# @przetestowane:
-# P <- c("marian", "lukasz", "kasia" )
-# V <- c(8, 7, 6)
-# EP<-list(individuals=P, values=V)
-# T_indexes <- c(2) #Łukasz w tabu
-# num_selected <- 1
-# meta_select_tabu_tournament (EP, T_indexes, numselected)
+# @przetestowane
 
 # @TODO priority=medium zaimplementować drugą selekcję
 meta.meta_select_tabu_threshold <- function (EP, T, num_selected){	
@@ -146,14 +125,14 @@ meta.meta_update_tabu <- function(T, P, tabu_pop_size){
 }
 
 meta.meta_replacement <- function (EP, EO) {
-	ni <- length(EP$P)
+	ni <- length(EP$individuals)
 	lambda <- length(EO)
 	if(ni==lambda)
 		return (EO$individuals)
 	return (c(EO$individuals, EP$individuals[1:(ni-lambda)]))	#tutaj zakładamy że EP jest posortowane malejąco
 }
+
 meta.problem <- list()
-meta.params <- list()
 
 main<-function(){
 
