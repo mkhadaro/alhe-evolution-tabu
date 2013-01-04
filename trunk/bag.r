@@ -6,15 +6,17 @@ bag.data <- list(
 		)
 
 bag.init <- function (population_size) {
-	P<-c()
-	for(i in population_size){
-		P[i] <- sample(1:length(bag.data$weights))		
+    weights_count <- length(bag.data$weights)
+	P<-matrix(ncol=weights_count, nrow=population_size,  byrow = T)
+	
+	for(i in 1:population_size){
+		P[i,]<-sample(1:weights_count,weights_count)		
 	}
 	return(P)
 }
 
 bag.mutation <- function (individual) {
-	indexes<-sample(1:length(individual),2,replace=T) 
+	indexes<-sample(1:length(individual),2,replace=N) 
 	temp<-individual[indexes[1]]
 	individual[indexes[1]]<-individual[indexes[2]]
 	individual[indexes[2]]<-temp
@@ -22,7 +24,7 @@ bag.mutation <- function (individual) {
 	return(individual)
 }
 
-bag.equal_individuals (i1, i2) {
+bag.equal_individuals <-function(i1, i2) {
 	return (all(i1==i2))
 }
 
