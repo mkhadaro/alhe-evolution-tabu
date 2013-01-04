@@ -68,12 +68,12 @@ meta.UG<-function()
 # 			listę osobników (wraz z odpowiadającą listą obliczonych ocen);
 # 			ma postać (list(c("Marian", "Marek", Judasz), c(8,6,5)))
 meta.eval <- function(I) { #I==individuals
-	len <- length(I)
+	len <- nrow (I)
 	E <- c()
 	for(i in 1:len) {
-		E[i]<-meta.problem.value(I[i])
+		E[i]<-meta.problem.value(I[i,])
 	}
-	I<-I[order(E, decreasing=TRUE)]
+	I<-I[order(E, decreasing=TRUE), ]
 	E<-sort(E, decreasing=TRUE)
 	return (list(values=E, individuals=I))
 }
