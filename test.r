@@ -63,11 +63,10 @@ test.meta_get_tabu_indexes <- function () {
 
 test.meta_select_tabu_tournament <- function() {
 	P <- bag.init(10)
-	V <- c(8, 7, 6)
-	EP<-list(individuals=P, values=V)
-	T_indexes <- c(2) #lukasz w tabu
+	EP<- meta.eval(P)
+	T_indexes <- c(1:9) 
 	num_selected <- 1
-	return (meta_select_tabu_tournament (EP, T_indexes, numselected))
+	return (meta.meta_select_tabu_tournament (EP, T_indexes, num_selected))
 }
 
 test.meta_eval <- function() {
