@@ -7,7 +7,7 @@ bag.problem <- list(
 		)
 #TESTED
 bag.init <- function (population_size) {
-    weights_count <- length(bag.data$weights)
+    weights_count <- length(bag.problem$weights)
 	P<-matrix(ncol=weights_count, nrow=population_size,  byrow = T)
 	
 	for(i in 1:population_size){
