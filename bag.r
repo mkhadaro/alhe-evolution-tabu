@@ -4,7 +4,7 @@ bag.data <- list(
 			values=c(1,2,4),
 			max_weight=3
 		)
-
+#TESTED
 bag.init <- function (population_size) {
     weights_count <- length(bag.data$weights)
 	P<-matrix(ncol=weights_count, nrow=population_size,  byrow = T)
@@ -14,23 +14,28 @@ bag.init <- function (population_size) {
 	}
 	return(P)
 }
-
+#TESTED
 bag.mutation <- function (individual) {
-	indexes<-sample(1:length(individual),2,replace=N) 
+	indexes<-sample(1:length(individual),2,replace=T) 
 	temp<-individual[indexes[1]]
 	individual[indexes[1]]<-individual[indexes[2]]
-	individual[indexes[2]]<-temp
-	
+	individual[indexes[2]]<-temp	
 	return(individual)
 }
 
+#TESTED
 bag.equal_individuals <-function(i1, i2) {
 	return (all(i1==i2))
 }
 
+#TESTED
 bag.crossover <- function (parent1, parent2) {
+
 #krzyzowanie PMX oparte o http://algorytmy-genetyczne.eprace.edu.pl/664,Implementacja.html
-    parentLength <- length(parent1)
+#Uwaga, algorytm tam napisany jest jednak nieco bledny
+    if(length(parent1)!=length(parent2))
+		stop("Nie mozna krzyzowac rodzicow o roznych rozmiarach")
+	parentLength <- length(parent1)
 	crossLength <- sample(1:parentLength,1,replace=T)#dlugosc segemntu krzyzowania
 	ibeg <- sample(1:(parentLength-crossLength+1),1,replace=T)#index poczatkowy seg. krzyz.
 	iend <- (ibeg+crossLength-1) #index koncowy seg. krzyz.
@@ -73,8 +78,8 @@ bag.value <- function (individual) {
 	weights <- bag.problem$weights
 	values  <- bag.problem$values
 	bag_free_weight <-bag.problem$max_weight
-	for(pos in 1:len){
-		 if(weights[pos]<bag_free_weight) {
+	for(pos in individual){
+		 if(weights[pos]<=bag_free_weight) {
 		 	bag_free_weight <- bag_free_weight - weights[pos]
 		 	value <- value + values[pos]
 		 	if(bag_free_weight == 0)
