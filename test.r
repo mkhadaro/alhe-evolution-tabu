@@ -70,9 +70,13 @@ test.meta_select_tabu_tournament <- function() {
 	return (meta_select_tabu_tournament (EP, T_indexes, numselected))
 }
 
+meta.problem.value <-bag.value
+
 test.meta_eval <- function() {
 	I<-bag.init(10)
-	meta.problem<-bag
+	print(I)
+	print(I[1,])
+	#bag.value(I[1])	
  	return (meta.eval(I))
 }
 

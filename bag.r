@@ -1,6 +1,6 @@
 
 # ustawienia wywolania, mozna przeladowac, mozna zostawic
-bag.data <- list(
+bag.problem <- list(
 			weights=c(1,2,3),
 			values=c(1,2,4),
 			max_weight=3
