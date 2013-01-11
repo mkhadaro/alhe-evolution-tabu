@@ -3,8 +3,16 @@
 bag.problem <- list(
 			weights=c(1, 2, 3, 4, 5),
 			values=c(1, 1, 11, 16, 24),
-			max_weight=7
+			max_weight=100
 		)
+
+initializeFromFile <- function () {
+	source("/home/szymon/alhe-evolution-tabu/knapsack/weights")
+	source("/home/szymon/alhe-evolution-tabu/knapsack/values")
+	bag.problem$weights<<-W
+	bag.problem$values<<-V
+}
+
 #TESTED
 bag.init <- function (population_size) {
     weights_count <- length(bag.problem$weights)
@@ -92,4 +100,22 @@ bag.value <- function (individual) {
 		 }
 	}
 	return(value)
+}
+
+
+bag.individual_weight <<- function (individual) {
+	len <-length(individual)
+	value <- 0
+	weights <- bag.problem$weights
+	values  <- bag.problem$values
+	bag_free_weight <-bag.problem$max_weight
+	for(pos in individual){
+		 if(weights[pos]<=bag_free_weight) {
+		 	bag_free_weight <- bag_free_weight - weights[pos]
+		 	value <- value + values[pos]
+		 	if(bag_free_weight == 0)
+		 		break
+		 }
+	}
+	return(bag_free_weight)
 }
