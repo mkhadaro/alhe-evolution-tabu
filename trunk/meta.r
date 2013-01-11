@@ -2,13 +2,13 @@
 #	1. eval (I, value) sortuje wg malejącej oceny osobniki
 
 meta.params <- list(
-			ni =10,	#ni>lambda
-			lambda = 10,
-			max_iter = 50, #Iteracje do zakonczenia algorytmu
+			ni =30,	#ni>lambda
+			lambda = 25,
+			max_iter = 1000, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
-			prob_mut = 0.01,
-			tabu_pop_size = 3, #Ilosc populacji pamietanych przez tabu
-			tabu_penaulty = 0.3 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
+			prob_mut = 0.2,
+			tabu_pop_size = 10, #Ilosc populacji pamietanych przez tabu
+			tabu_penaulty = 0.0 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
 		)
 
 
@@ -37,7 +37,8 @@ meta.meta_evolution <- function () {
 		T<-meta.update_tabu(T, P, tabu_it)
 		tabu_it <- ((tabu_it +1)%%meta.params$tabu_pop_size)	# cykliczne tabu iterator po populacjach (MRU most recently used) 
 		P <- meta.replacement( EP,EO )
-		print(EP)
+		print(EP$values)
+		print(bag.individual_weight(EP$individuals[1,]))
 	} 
 	
 }
@@ -48,10 +49,8 @@ meta.get_tabu_indexes <- function (EP, T) {
 	result <- c()
 
 	size_tabu<-nrow(T)
-	print(size_tabu)
 
 	size_EP <- length(EP$values)
-	print(size_EP)
 
 	for(i in 1:size_tabu) {
 		for(j in 1:size_EP) {
@@ -110,7 +109,7 @@ meta.meta_select_tabu_tournament <- function (EP, T_indexes, num_selected) {
 	
 	for (i in 1:num_selected) {
 		p<-sample(1:ni,2,replace=T, prob=weights)
-		print(p)
+		#print(p)
 		if( (EP$values[p[1]]) > (EP$values[p[2]]) ) 
 			result[i, ] <- EP$individuals[p[1], ]
 		else 
@@ -128,7 +127,7 @@ meta.meta_select_tabu_threshold <- function (EP, T, num_selected){
 
 meta.meta_update_tabu <- function(T, P, tabu_it){
 	offset <- (tabu_it)*meta.params$ni+1
-	T[offset:(offset+meta.params$ni-1), ]<-P[1:10, ]
+	T[offset:(offset+meta.params$ni-1), ]<-P[1:meta.params$ni, ]
 	return (T)
 }
 
@@ -141,7 +140,7 @@ meta.meta_replacement <- function (EP, EO) {
 	dif <- meta.params$ni-meta.params$lambda
 	
 	result[1:dif, ] <- (EP$individuals) [1:dif, ]
-	result[dif:meta.params$ni, ] <- (EO$individuals)[1:meta.params$lambda, ]
+	result[(dif+1):meta.params$ni, ] <- (EO$individuals)[1:meta.params$lambda, ]
 
 	return (result)
 }
