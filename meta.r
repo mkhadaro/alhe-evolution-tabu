@@ -171,7 +171,7 @@ main<-function(){
 	}
 
 	print(RESULTS)
-	write.table(RESULTS,file="~/Myfile.csv",sep=",")
+	write.table(RESULTS,file="F:\\Studia\\VII Semestr Informa\\ALHE\\Projekt\\Myfile.csv",sep=";")
 	
 }
 
