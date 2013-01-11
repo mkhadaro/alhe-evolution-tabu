@@ -159,7 +159,7 @@ main<-function(){
 	meta.select <<- meta.meta_select_tabu_tournament
 	meta.update_tabu<<-meta.meta_update_tabu
 	meta.replacement<<-meta.meta_replacement
-	max_exec<-25
+	max_exec<-10
 	RESULTS<<-matrix(byrow = T, ncol=meta.params$max_iter, nrow=max_exec)
 	NUM_EXECUTION<<-1
 	p<<-c(1,2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89)
@@ -171,7 +171,7 @@ main<-function(){
 	}
 
 	print(RESULTS)
-	write.table(RESULTS,file="F:\\Studia\\VII Semestr Informa\\ALHE\\Projekt\\Myfile.csv",sep=";")
+	write.table(RESULTS,file="F:\\Studia\\VII Semestr Informa\\ALHE\\Projekt\\Myfile.csv",sep=";", row.names = 1:max_exec, col.names = 1:meta.params$max_iter)
 	
 }
 
