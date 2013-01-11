@@ -1,0 +1,9 @@
+ni 35
+lambda 30
+
+Pamiêtaj o œcie¿ce bezwzglêdniej
+
+tabu
+pop_size	2	6	
+panaulty	0	0.1		0.4 0.7 1
+
