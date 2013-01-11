@@ -2,13 +2,13 @@
 #	1. eval (I, value) sortuje wg malejącej oceny osobniki
 
 meta.params <- list(
-			ni =30,	#ni>lambda
-			lambda = 25,
-			max_iter = 1000, #Iteracje do zakonczenia algorytmu
+			ni =20,	#ni>lambda
+			lambda = 15,
+			max_iter = 50, #Iteracje do zakonczenia algorytmu
 			prob_cross = 0.8,	
 			prob_mut = 0.2,
-			tabu_pop_size = 10, #Ilosc populacji pamietanych przez tabu
-			tabu_penaulty = 0.0 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
+			tabu_pop_size = 3, #Ilosc populacji pamietanych przez tabu
+			tabu_penaulty = 0.1 # wartosci od 0 do 1, gdzie 1 oznacza brak kary, a 0 twarde tabu 
 		)
 
 
@@ -16,7 +16,7 @@ meta.meta_evolution <- function () {
 	P <- meta.problem.init(meta.params$ni) 
 	T <- matrix(nrow=meta.params$tabu_pop_size*meta.params$ni, ncol=length(P[1, ]))
 	tabu_it <- 0
-	for(i in 1:meta.params$max_iter) {
+	for(j in 1:meta.params$max_iter) {
 		EP  <- meta.eval(P) 
 		T_indexes <- meta.get_tabu_indexes(EP, T)
 		O <- matrix(nrow=meta.params$lambda, ncol=length(P[1, ]))	
@@ -37,8 +37,9 @@ meta.meta_evolution <- function () {
 		T<-meta.update_tabu(T, P, tabu_it)
 		tabu_it <- ((tabu_it +1)%%meta.params$tabu_pop_size)	# cykliczne tabu iterator po populacjach (MRU most recently used) 
 		P <- meta.replacement( EP,EO )
-		print(EP$values)
-		print(bag.individual_weight(EP$individuals[1,]))
+		#print(EP$values)
+		RESULTS[NUM_EXECUTION, j] <<- EP$values[1]
+		#print(bag.individual_weight(EP$individuals[1,]))
 	} 
 	
 }
@@ -149,6 +150,7 @@ meta.meta_replacement <- function (EP, EO) {
 
 
 main<-function(){
+
 	meta.problem.crossover <<- bag.crossover
 	meta.problem.mutation <<- bag.mutation
 	meta.problem.init <<- bag.init
@@ -157,6 +159,19 @@ main<-function(){
 	meta.select <<- meta.meta_select_tabu_tournament
 	meta.update_tabu<<-meta.meta_update_tabu
 	meta.replacement<<-meta.meta_replacement
-	meta.meta_evolution()
+	max_exec<-25
+	RESULTS<<-matrix(byrow = T, ncol=meta.params$max_iter, nrow=max_exec)
+	NUM_EXECUTION<<-1
+	p<<-c(1,2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89)
+	for(i in 1:max_exec) {
+		set.seed(p[i])
+		meta.meta_evolution()
+		NUM_EXECUTION<<-NUM_EXECUTION+1
+		print(".")
+	}
+
+	print(RESULTS)
+	write.table(RESULTS,file="~/Myfile.csv",sep=",")
+	
 }
 
